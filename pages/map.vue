@@ -1,10 +1,7 @@
 <template>
   <v-container v-if="places">
     <v-card v-if="selectedPlace" small class="place-info" max-width="250">
-      <v-img
-        height="150"
-        src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
-      ></v-img>
+      <v-img height="150" src="http://localhost:3000/place1.jpg"></v-img>
 
       <v-card-title class="pb-0">
         Platz: {{ selectedPlace.id }}
@@ -18,7 +15,9 @@
         </v-chip>
       </v-card-title>
       <v-card-text>
-        <div class="text-subtitle-1 mb-2">15:30 - 16:20</div>
+        <div class="text-subtitle-1 mb-2">
+          {{ query.timeStart }} - {{ query.timeEnd }}
+        </div>
 
         <v-chip small v-for="prop in selectedPlace.properties" :key="prop">
           {{ prop }}
@@ -67,6 +66,9 @@ export default {
     }
   },
   computed: {
+    query() {
+      return this.$store.state.query.query
+    },
     places() {
       return placePositions
         .map((place) => {
@@ -116,6 +118,20 @@ export default {
     onPlaceSelected(placeId) {
       console.log(this.places, placeId, this.places[placeId])
       this.selectedPlace = this.places[placeId]
+    },
+    book() {
+      this.$store.commit('booking/createBooking', {
+        place: this.selectedPlace,
+        date: this.query.date,
+        timeStart: this.query.timeStart,
+        timeEnd: this.query.timeEnd,
+        user: null,
+      })
+
+      const user = false
+      this.$router.push({
+        path: user ? '/confirmation' : '/login',
+      })
     },
   },
   components: {
