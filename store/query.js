@@ -1,5 +1,10 @@
 export const state = () => ({
-  query: null,
+  query: {
+    date: '2021-11-19',
+    timeStart: '14:20',
+    timeEnd: '16:20',
+    features: ['Drucker'],
+  },
 })
 
 export const mutations = {

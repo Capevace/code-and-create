@@ -2,9 +2,7 @@
   <svg
     ref="map"
     class="space-svg"
-    width="657px"
-    height="390px"
-    viewBox="0 0 657 390"
+    viewBox="0 0 350 390"
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"
     xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -13,78 +11,63 @@
     <g
       id="space"
       stroke="none"
-      stroke-width="1"
+      stroke-width="3"
       fill="none"
       fill-rule="evenodd"
     >
-      <g
-        id="rooms"
-        transform="translate(393.000000, 0.000000)"
-        fill="#D8D8D8"
-        stroke="#979797"
-      >
-        <rect
-          id="space-room-2"
-          x="0.5"
-          y="210.5"
-          width="263"
-          height="179"
-        ></rect>
-        <rect id="space-room-1" x="0.5" y="0.5" width="263" height="209"></rect>
-      </g>
-      <g id="tables" transform="translate(38.000000, 44.000000)" fill="#EFEFEF">
+      <g id="tables" transform="translate(40.000000, 45.000000)" fill="#EFEFEF">
         <rect
           id="space-table-1"
+          x="0"
+          y="122"
+          width="138"
+          height="51"
+          rx="8"
+        ></rect>
+        <rect
+          id="space-table-2"
           x="0"
           y="0"
           width="138"
           height="51"
           rx="8"
         ></rect>
+        <rect
+          id="space-table-3"
+          x="178"
+          y="0"
+          width="138"
+          height="51"
+          rx="8"
+        ></rect>
+        <rect
+          id="space-table-4"
+          transform="translate(269.000000, 198.000000) rotate(90.000000) translate(-269.000000, -198.000000) "
+          x="200"
+          y="151"
+          width="138"
+          height="94"
+          rx="8"
+        ></rect>
       </g>
       <g id="places" transform="translate(57.000000, 34.000000)">
-        <circle id="space-p-6" fill="#F14F4F" cx="10" cy="10" r="10"></circle>
-
         <circle
-          @click="test"
-          id="space-p-5"
-          stroke="#979797"
-          fill="#D8D8D8"
-          cx="50"
-          cy="10"
+          v-for="place in places"
+          :key="place.id"
+          :id="`space-p-${place.id}`"
+          :fill="place.available ? '#78EA78' : 'rgba(0, 0, 0, 0.2)'"
+          :stroke="
+            place.id === selectedPlace
+              ? place.available
+                ? '#438b43'
+                : 'rgba(0, 0, 0, 0.4)'
+              : 'transparent'
+          "
+          :cx="place.x"
+          :cy="place.y"
           r="10"
-        ></circle>
-        <circle
-          id="space-p-4"
-          stroke="#979797"
-          fill="#D8D8D8"
-          cx="90"
-          cy="10"
-          r="10"
-        ></circle>
-        <circle
-          id="space-p-3"
-          stroke="#979797"
-          fill="#D8D8D8"
-          cx="10"
-          cy="60"
-          r="10"
-        ></circle>
-        <circle
-          id="space-p-2"
-          stroke="#979797"
-          fill="#D8D8D8"
-          cx="50"
-          cy="60"
-          r="10"
-        ></circle>
-        <circle
-          id="space-p-1"
-          stroke="#979797"
-          fill="#D8D8D8"
-          cx="90"
-          cy="60"
-          r="10"
+          :class="{ active: place.available }"
+          @click="selectPlace(place.id)"
         ></circle>
       </g>
     </g>
@@ -94,6 +77,16 @@
 import Vue from 'vue'
 
 export default {
+  props: {
+    selectedPlace: {
+      type: Number,
+      default: null,
+    },
+    places: {
+      type: Object,
+      default: [],
+    },
+  },
   mounted() {
     if (Vue.svgPanZoom) {
     }
@@ -101,11 +94,11 @@ export default {
     //   await import('../static/svg-pan-zoom')
     //   setInterval(() => console.log(window.svgPanZoom), 1000)
     // }
-    Vue.svgPanZoom(this.$refs.map)
+    // Vue.svgPanZoom(this.$refs.map)
   },
   methods: {
-    test() {
-      alert('hi')
+    selectPlace(placeId) {
+      this.$emit('select', placeId)
     },
   },
 }
@@ -118,5 +111,9 @@ export default {
 .space-svg circle:hover {
   fill: rgba(0, 0, 0, 0.2);
   cursor: pointer;
+}
+
+.space-svg circle.active:hover {
+  fill: #a9d8a9;
 }
 </style>
