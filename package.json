@@ -16,6 +16,7 @@
     "express": "^4.17.1",
     "nodemailer": "^6.7.1",
     "nuxt": "^2.15.7",
+    "svg-pan-zoom": "^3.6.1",
     "vuetify": "^2.5.5"
   },
   "devDependencies": {
