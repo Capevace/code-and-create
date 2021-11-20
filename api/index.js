@@ -41,12 +41,13 @@ const nodemailer = require('nodemailer');
  * @property {string[]} properties
  */
 
-const job = new cron.CronJob('0 0 * * * *', () => {
+const job = new cron.CronJob('0 * * * * *', () => {
+  const now = Date.now();
   for (const room of rooms.values()) {
     for (const table of room.tables) {
       if (table.booked.length === 0) continue;
 
-      if (Date.now() - table.booked[0].from >= 900000) {
+      if (now - table.booked[0].from >= 900000) {
         const booking = table.booked[0];
         if (!booking.checkedIn) {
           const booking = table.booked.shift();
@@ -87,6 +88,8 @@ const rooms = new Map();
 const bookings = new Map();
 let bookingId = 0;
 
+initData();
+
 app.use(bodyParser.json());
 
 app.post('/register', (req, res) => {
@@ -96,11 +99,13 @@ app.post('/register', (req, res) => {
   const password = req.body.password;
   if (!mail || !password) return res.json({ data: false });
 
-  if (!users.get(mail)) return res.json({ data: "Mail already in use." });
+  if (users.has(mail)) return res.json({ data: "Mail already in use." });
 
   sendMail(mail, "Registrierung", "a");
 
   users.set(mail, { mail, password });
+
+  res.json({ data: true });
 });
 
 app.post('/login', (req, res) => {
@@ -115,18 +120,19 @@ app.post('/login', (req, res) => {
   if (!user) return res.json({ data: "Mail not registered." });
 
   if (user.password === password) return res.json({ data: true });
-  return res.json({ data: false });
+  res.json({ data: false });
 });
 
 app.get('/roominfo', (req, res) => {
   res.json({ data: Array.from(rooms, ([id, room]) => ({ id, room })) });
 });
 
-app.get('/find/:room', (req, res) => {
+app.get('/find', (req, res) => {
   //@ts-ignore
-  const room = rooms.get(parseInt(req.query.room));
+  const room = rooms.get(parseInt(req.query.room) || 0);
   /** @type {string[]} */
-  const filters = req.body.filters;
+  //@ts-ignore
+  const filters = req.query.filters;
   if (!room) return res.json({ data: false });
 
   /** @type {number} */
@@ -141,7 +147,8 @@ app.get('/find/:room', (req, res) => {
 });
 
 app.post('/book', (req, res) => {
-  const room = rooms.get(req.body.room);
+  //@ts-ignore
+  const room = rooms.get(req.query.room || 0);
   if (!room) return res.json({ data: false });
 
   const table = room.tables.find(t => t.id === req.body.tableId);
@@ -154,7 +161,9 @@ app.post('/book', (req, res) => {
   /** @type {string} */
   const by = req.body.user;
 
-  if (isBookable(table, from, to)) return res.json({ data: false });
+  if (!users.has(by)) return res.json({ data: false });
+
+  if (!isBookable(table, from, to)) return res.json({ data: false });
 
   book(room, table, from, to, by);
 
@@ -173,7 +182,7 @@ app.get('/check-in/:id', (req, res) => {
 });
 
 app.post('/check-out', (req, res) => {
-  const room = rooms.get(req.body.room);
+  const room = rooms.get(req.body.room || 0);
   if (!room) return res.json({ data: false });
 
   const table = room.tables.find(t => t.id === req.body.tableId);
@@ -189,6 +198,8 @@ app.post('/check-out', (req, res) => {
 
   bookings.delete(table.booked[index].id);
   table.booked.splice(index, 1);
+
+  res.json({ data: true })
 });
 
 app.post('/renew/:id', (req, res) => {
@@ -218,15 +229,11 @@ app.post('/renew/:id', (req, res) => {
  * @param {number} to 
  * @param {string[]} [filters]
  */
-const isBookable = (table, from, to, filters) => !table.booked.some((books) => 
-  !table.disabled 
-    &&
-  (
-    (books.from >= from && books.from <= to) || (books.to >= from && books.to <= to)
-  ) && (
-    !filters?.length || !filters.some(f => !table.properties.includes(f))
+const isBookable = (table, from, to, filters) => !table.disabled
+  && (!filters?.length || !filters.filter(f => !table.properties.includes(f)).length)
+  && !table.booked.some((booking) =>
+    booking.from <= to && from <= booking.to
   )
-)
 
 /**
  * @param {Room} room 
@@ -268,6 +275,17 @@ const sendMail = (to, subject, text) => {
   transporter.sendMail(mailOptions, (error, info) => {
     // 
   });
+}
+
+function initData() {
+  const data = require('./data.json').reverse();
+  data.forEach(t => t.id--);
+  /** @type {Room} */
+  const room = { id: 0, tables: [] };
+
+  for (const table of data) room.tables.push(table);
+
+  rooms.set(0, room);
 }
 
 module.exports = app;
