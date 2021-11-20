@@ -1,9 +1,9 @@
 //@ts-check
 
-const bodyParser = require('body-parser');
-const app = require('express')();
-const cron = require('cron');
-const nodemailer = require('nodemailer');
+const bodyParser = require('body-parser')
+const app = require('express')()
+const cron = require('cron')
+const nodemailer = require('nodemailer')
 
 /**
  * @typedef User
@@ -41,227 +41,243 @@ const nodemailer = require('nodemailer');
  * @property {string[]} properties
  */
 
-const job = new cron.CronJob('0 0 * * * *', () => {
-  for (const room of rooms.values()) {
-    for (const table of room.tables) {
-      if (table.booked.length === 0) continue;
+const job = new cron.CronJob(
+  '0 0 * * * *',
+  () => {
+    for (const room of rooms.values()) {
+      for (const table of room.tables) {
+        if (table.booked.length === 0) continue
 
-      if (Date.now() - table.booked[0].from >= 900000) {
-        const booking = table.booked[0];
-        if (!booking.checkedIn) {
-          const booking = table.booked.shift();
-          bookings.delete(booking.id);
+        if (Date.now() - table.booked[0].from >= 900000) {
+          const booking = table.booked[0]
+          if (!booking.checkedIn) {
+            const booking = table.booked.shift()
+            bookings.delete(booking.id)
 
-          const mailOptions = {
-            from: "<testcodecreate@gmx.de>",
-            to: `<${booking.by}>`,
-            subject: "Buchung abgelaufen",
-            text: "a"
-          };
+            const mailOptions = {
+              from: '<testcodecreate@gmx.de>',
+              to: `<${booking.by}>`,
+              subject: 'Buchung abgelaufen',
+              text: 'a',
+            }
 
-          transporter.sendMail(mailOptions, (error, info) => {
-            // 
-          });
+            transporter.sendMail(mailOptions, (error, info) => {
+              //
+            })
+          }
         }
       }
     }
-  }
-}, null, true);
-job.start();
+  },
+  null,
+  true
+)
+job.start()
 
 const transporter = nodemailer.createTransport({
-  host: "mail.gmx.net",
+  host: 'mail.gmx.net',
   port: 587,
   secure: false,
   auth: {
-    user: "testcodecreate@gmx.de",
-    pass: "C&CKöln2021"
-  }
-});
+    user: 'testcodecreate@gmx.de',
+    pass: 'C&CKöln2021',
+  },
+})
 
 /** @type {Map<string, User>} */
-const users = new Map();
+const users = new Map()
 /** @type {Map<number, Room>} */
-const rooms = new Map();
+const rooms = new Map()
 /** @type {Map<number, Booking>} */
-const bookings = new Map();
-let bookingId = 0;
+const bookings = new Map()
+let bookingId = 0
 
-app.use(bodyParser.json());
+app.use(bodyParser.json())
 
 app.post('/register', (req, res) => {
   /** @type {string} */
-  const mail = req.body.mail;
+  const mail = req.body.mail
   /** @type {string} */
-  const password = req.body.password;
-  if (!mail || !password) return res.json({ data: false });
+  const password = req.body.password
+  if (!mail || !password) return res.json({ data: false })
 
-  if (!users.get(mail)) return res.json({ data: "Mail already in use." });
+  if (!users.get(mail)) return res.json({ data: 'Mail already in use.' })
 
-  sendMail(mail, "Registrierung", "a");
+  sendMail(mail, 'Registrierung', 'a')
 
-  users.set(mail, { mail, password });
-});
+  users.set(mail, { mail, password })
+})
 
 app.post('/login', (req, res) => {
   /** @type {string} */
-  const mail = req.body.mail;
+  const mail = req.body.mail
   /** @type {string} */
-  const password = req.body.password;
-  if (!mail || !password) return res.json({ data: false });
-  
-  const user = users.get(mail);
+  const password = req.body.password
+  if (!mail || !password) return res.json({ data: false })
 
-  if (!user) return res.json({ data: "Mail not registered." });
+  const user = users.get(mail)
 
-  if (user.password === password) return res.json({ data: true });
-  return res.json({ data: false });
-});
+  if (!user) return res.json({ data: 'Mail not registered.' })
+
+  if (user.password === password) return res.json({ data: true })
+  return res.json({ data: false })
+})
 
 app.get('/roominfo', (req, res) => {
-  res.json({ data: Array.from(rooms, ([id, room]) => ({ id, room })) });
-});
+  res.json({ data: Array.from(rooms, ([id, room]) => ({ id, room })) })
+})
 
 app.get('/find', (req, res) => {
-  const room = rooms.get(req.body.room);
+  const room = rooms.get(parseInt(req.query.room))
   /** @type {string[]} */
-  const filters = req.body.filters;
-  if (!room) return res.json({ data: false });
+  const filters = req.query.filters
+  if (!room) return res.json({ data: false })
 
   /** @type {number} */
-  const from = req.body.from;
+  const from = req.query.from
   /** @type {number} */
-  const to = req.body.to;
-  const tables = room.tables.filter((table) => isBookable(table, from, to, filters)).map(t => t.id);
+  const to = req.query.to
+  const tables = room.tables
+    .filter((table) => isBookable(table, from, to, filters))
+    .map((t) => t.id)
 
-  res.json({ data: tables });
-});
+  res.json({ data: tables })
+})
 
 app.post('/book', (req, res) => {
-  const room = rooms.get(req.body.room);
-  if (!room) return res.json({ data: false });
+  const room = rooms.get(req.body.room)
+  if (!room) return res.json({ data: false })
 
-  const table = room.tables.find(t => t.id === req.body.tableId);
-  if (!table) return res.json({ data: false });
+  const table = room.tables.find((t) => t.id === req.body.tableId)
+  if (!table) return res.json({ data: false })
 
   /** @type {number} */
-  const from = req.body.from;
+  const from = req.body.from
   /** @type {number} */
-  const to = req.body.to;
+  const to = req.body.to
   /** @type {string} */
-  const by = req.body.user;
+  const by = req.body.user
 
-  if (isBookable(table, from, to)) return res.json({ data: false });
+  if (isBookable(table, from, to)) return res.json({ data: false })
 
-  book(room, table, from, to, by);
+  book(room, table, from, to, by)
 
-  res.json({ data: true });
-});
+  res.json({ data: true })
+})
 
 app.get('/check-in/:id', (req, res) => {
-  const id = parseInt(req.params.id);
+  const id = parseInt(req.params.id)
 
-  const booking = bookings.get(id);
-  if (!booking) return res.json({ data: false });
+  const booking = bookings.get(id)
+  if (!booking) return res.json({ data: false })
 
-  booking.checkedIn = true;
+  booking.checkedIn = true
 
-  res.json({ data: true });
-});
+  res.json({ data: true })
+})
 
 app.post('/check-out', (req, res) => {
-  const room = rooms.get(req.body.room);
-  if (!room) return res.json({ data: false });
+  const room = rooms.get(req.body.room)
+  if (!room) return res.json({ data: false })
 
-  const table = room.tables.find(t => t.id === req.body.tableId);
-  if (!table) return res.json({ data: false });
+  const table = room.tables.find((t) => t.id === req.body.tableId)
+  if (!table) return res.json({ data: false })
 
   /** @type {number} */
-  const from = req.body.from;
+  const from = req.body.from
   /** @type {number} */
-  const to = req.body.to;
+  const to = req.body.to
 
-  const index = table.booked.findIndex(b => b.from === from && b.to === to);
-  if (index === -1) return res.json({ data: false });
+  const index = table.booked.findIndex((b) => b.from === from && b.to === to)
+  if (index === -1) return res.json({ data: false })
 
-  bookings.delete(table.booked[index].id);
-  table.booked.splice(index, 1);
-});
+  bookings.delete(table.booked[index].id)
+  table.booked.splice(index, 1)
+})
 
 app.post('/renew/:id', (req, res) => {
   /** @type {number} */
-  const to = req.body.to;
-  const id = parseInt(req.params.id);
+  const to = req.body.to
+  const id = parseInt(req.params.id)
 
-  const booking = bookings.get(id);
-  if (!booking) return res.json({ data: false });
+  const booking = bookings.get(id)
+  if (!booking) return res.json({ data: false })
 
-  const room = rooms.get(booking.roomId);
-  const table = room?.tables[booking.tableId];
+  const room = rooms.get(booking.roomId)
+  const table = room?.tables[booking.tableId]
 
-  if (!room || !table) return res.json({ data: false });
+  if (!room || !table) return res.json({ data: false })
 
-  if (!isBookable(table, booking.to, to)) return res.json({ data: false });
+  if (!isBookable(table, booking.to, to)) return res.json({ data: false })
 
-  booking.from = booking.to;
-  booking.to = to;
+  booking.from = booking.to
+  booking.to = to
 
-  res.json({ data: true });
-});
+  res.json({ data: true })
+})
 
 /**
- * @param {Table} table 
- * @param {number} from 
- * @param {number} to 
+ * @param {Table} table
+ * @param {number} from
+ * @param {number} to
  * @param {string[]} [filters]
  */
-const isBookable = (table, from, to, filters) => !table.booked.some((books) => (
-    (books.from >= from && books.from <= to) || (books.to >= from && books.to <= to)
-  ) && (
-    !filters?.length || !filters.some(f => !table.properties.includes(f))
+const isBookable = (table, from, to, filters) =>
+  !table.booked.some(
+    (books) =>
+      ((books.from >= from && books.from <= to) ||
+        (books.to >= from && books.to <= to)) &&
+      (!filters?.length || !filters.some((f) => !table.properties.includes(f)))
   )
-)
 
 /**
- * @param {Room} room 
- * @param {Table} table 
- * @param {number} from 
- * @param {number} to 
- * @param {string} by 
+ * @param {Room} room
+ * @param {Table} table
+ * @param {number} from
+ * @param {number} to
+ * @param {string} by
  */
 function book(room, table, from, to, by) {
-  let index = -1;
+  let index = -1
   for (let i = 0; i < table.booked.length; i++) {
-    const booking = table.booked[i];
+    const booking = table.booked[i]
     if (booking.from >= from) {
-      index = i;
-      break;
+      index = i
+      break
     }
   }
 
-  const booking = { from, to, by, checkedIn: false, id: bookingId++, tableId: table.id, roomId: room.id };
-  table.booked.splice(index, 0, booking);
-  bookings.set(booking.id, booking);
+  const booking = {
+    from,
+    to,
+    by,
+    checkedIn: false,
+    id: bookingId++,
+    tableId: table.id,
+    roomId: room.id,
+  }
+  table.booked.splice(index, 0, booking)
+  bookings.set(booking.id, booking)
 
-  sendMail(by, "Buchungsbestätigung", `Buchungs-ID: ${booking.id}`);
+  sendMail(by, 'Buchungsbestätigung', `Buchungs-ID: ${booking.id}`)
 }
 
 /**
- * @param {string} to 
- * @param {string} subject 
- * @param {string} text 
+ * @param {string} to
+ * @param {string} subject
+ * @param {string} text
  */
 const sendMail = (to, subject, text) => {
   const mailOptions = {
-    from: "<testcodecreate@gmx.de>",
+    from: '<testcodecreate@gmx.de>',
     to: `<${to}>`,
     subject,
-    text
-  };
+    text,
+  }
 
   transporter.sendMail(mailOptions, (error, info) => {
-    // 
-  });
+    //
+  })
 }
 
-module.exports = app;
+module.exports = app

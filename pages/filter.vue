@@ -131,11 +131,15 @@ export default {
     async find() {
       this.loading = true
       try {
-        const { places } = await this.$axios.$post('book', {
-          ...this.$store.state.query.query,
-          features: this.featureList.filter((f, index) =>
-            this.features.includes(index)
-          ),
+        const from = new Date(`${this.date} ${this.timeStart}`).getTime()
+        const to = new Date(`${this.date} ${this.timeStart}`).getTime()
+
+        const { places } = await this.$axios.$post('find', {
+          query: {
+            room: 0,
+            from,
+            to,
+          },
         })
 
         this.$store.commit('map/places', places)

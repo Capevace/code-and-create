@@ -2,20 +2,37 @@
 <svg width="657px" height="390px" viewBox="0 0 657 390" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
     <g id="space" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="rooms" transform="translate(393.000000, 0.000000)" fill="#D8D8D8" stroke="#979797">
-            <rect id="space-room-2" x="0.5" y="210.5" width="263" height="179"></rect>
-            <rect id="space-room-1" x="0.5" y="0.5" width="263" height="209"></rect>
+        <g id="tables" transform="translate(231.000000, 58.000000)" fill="#EFEFEF">
+            <rect id="space-table-1" x="0" y="122" width="138" height="51" rx="8"></rect>
+            <rect id="space-table-2" x="0" y="0" width="138" height="51" rx="8"></rect>
+            <rect id="space-table-3" x="178" y="0" width="138" height="51" rx="8"></rect>
+            <rect id="space-table-4" transform="translate(269.000000, 198.000000) rotate(90.000000) translate(-269.000000, -198.000000) " x="200" y="151" width="138" height="94" rx="8"></rect>
         </g>
-        <g id="tables" transform="translate(38.000000, 44.000000)" fill="#EFEFEF">
-            <rect id="space-table-1" x="0" y="0" width="138" height="51" rx="8"></rect>
-        </g>
-        <g id="places" transform="translate(57.000000, 34.000000)">
-            <circle id="space-p-6" fill="#F14F4F" cx="10" cy="10" r="10"></circle>
-            <circle id="space-p-5" stroke="#979797" fill="#D8D8D8" cx="50" cy="10" r="10"></circle>
-            <circle id="space-p-4" stroke="#979797" fill="#D8D8D8" cx="90" cy="10" r="10"></circle>
-            <circle id="space-p-3" stroke="#979797" fill="#D8D8D8" cx="10" cy="60" r="10"></circle>
-            <circle id="space-p-2" stroke="#979797" fill="#D8D8D8" cx="50" cy="60" r="10"></circle>
-            <circle id="space-p-1" stroke="#979797" fill="#D8D8D8" cx="90" cy="60" r="10"></circle>
+        <g id="places" transform="translate(250.000000, 48.000000)" fill="#D8D8D8" stroke="#979797">
+            <circle id="space-p-25" cx="90" cy="183" r="10"></circle>
+            <circle id="space-p-24" cx="50" cy="183" r="10"></circle>
+            <circle id="space-p-23" cx="90" cy="133" r="10"></circle>
+            <circle id="space-p-22" cx="10" cy="183" r="10"></circle>
+            <circle id="space-p-21" cx="50" cy="133" r="10"></circle>
+            <circle id="space-p-20" cx="10" cy="133" r="10"></circle>
+            <circle id="space-p-19" cx="50" cy="10" r="10"></circle>
+            <circle id="space-p-18" cx="10" cy="10" r="10"></circle>
+            <circle id="space-p-17" cx="90" cy="10" r="10"></circle>
+            <circle id="space-p-16" cx="10" cy="60" r="10"></circle>
+            <circle id="space-p-14" cx="50" cy="60" r="10"></circle>
+            <circle id="space-p-13" cx="90" cy="60" r="10"></circle>
+            <circle id="space-p-12" cx="228" cy="10" r="10"></circle>
+            <circle id="space-p-11" cx="188" cy="10" r="10"></circle>
+            <circle id="space-p-10" cx="268" cy="10" r="10"></circle>
+            <circle id="space-p-9" cx="188" cy="60" r="10"></circle>
+            <circle id="space-p-8" cx="228" cy="60" r="10"></circle>
+            <circle id="space-p-7" cx="268" cy="60" r="10"></circle>
+            <circle id="space-p-6" cx="208" cy="212" r="10"></circle>
+            <circle id="space-p-5" cx="208" cy="171" r="10"></circle>
+            <circle id="space-p-4" cx="208" cy="252" r="10"></circle>
+            <circle id="space-p-3" cx="296" cy="212" r="10"></circle>
+            <circle id="space-p-2" cx="296" cy="171" r="10"></circle>
+            <circle id="space-p-1" cx="296" cy="252" r="10"></circle>
         </g>
     </g>
 </svg>
