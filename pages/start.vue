@@ -6,7 +6,7 @@
       </v-col>
     </v-row>
 
-    <template v-if="step === 0 && !loading">
+    <template v-if="step === 0">
       <v-row>
         <v-col sm="12" md="5">
           <h2 class="">Wann willst du bei uns arbeiten?</h2>
@@ -21,7 +21,7 @@
       </v-row>
     </template>
 
-    <template v-if="step === 1 && !loading">
+    <template v-if="step === 1">
       <v-row>
         <v-col>
           <h2>Um wie viel Uhr soll es losgehen?</h2>
@@ -39,7 +39,7 @@
       </v-row>
     </template>
 
-    <template v-if="step === 2 && !loading">
+    <template v-if="step === 2">
       <v-row>
         <v-col>
           <h2>Bis wann willst du bei uns bleiben?</h2>
@@ -57,18 +57,6 @@
       </v-row>
     </template>
 
-    <template v-if="loading">
-      <h2>Bis wann willst du bei uns bleiben?</h2>
-
-      <div class="d-flex justify-center">
-        <v-time-picker
-          v-model="timeEnd"
-          format="24hr"
-          scrollable
-        ></v-time-picker>
-      </div>
-    </template>
-
     <v-row justify="end">
       <v-btn color="primary" @click="next">Weiter</v-btn>
     </v-row>
@@ -78,7 +66,6 @@
 export default {
   data() {
     return {
-      loading: false,
       step: 0,
       date: '',
       timeStart: '',
@@ -88,7 +75,14 @@ export default {
   methods: {
     next() {
       if (this.step >= 2) {
-        this.loading = true
+        this.$store.commit('query/setQuery', {
+          date: this.date,
+          timeStart: this.timeStart,
+          timeEnd: this.timeEnd,
+        })
+        this.$router.push({
+          path: '/filter',
+        })
       } else {
         this.step++
       }
