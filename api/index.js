@@ -122,16 +122,19 @@ app.get('/roominfo', (req, res) => {
   res.json({ data: Array.from(rooms, ([id, room]) => ({ id, room })) });
 });
 
-app.get('/find', (req, res) => {
-  const room = rooms.get(req.body.room);
+app.get('/find/:room', (req, res) => {
+  //@ts-ignore
+  const room = rooms.get(parseInt(req.query.room));
   /** @type {string[]} */
   const filters = req.body.filters;
   if (!room) return res.json({ data: false });
 
   /** @type {number} */
-  const from = req.body.from;
+  //@ts-ignore
+  const from = parseInt(req.query.from);
   /** @type {number} */
-  const to = req.body.to;
+  //@ts-ignore
+  const to = parseInt(req.query.to);
   const tables = room.tables.filter((table) => isBookable(table, from, to, filters)).map(t => t.id);
 
   res.json({ data: tables });
@@ -215,7 +218,10 @@ app.post('/renew/:id', (req, res) => {
  * @param {number} to 
  * @param {string[]} [filters]
  */
-const isBookable = (table, from, to, filters) => !table.booked.some((books) => (
+const isBookable = (table, from, to, filters) => !table.booked.some((books) => 
+  !table.disabled 
+    &&
+  (
     (books.from >= from && books.from <= to) || (books.to >= from && books.to <= to)
   ) && (
     !filters?.length || !filters.some(f => !table.properties.includes(f))
