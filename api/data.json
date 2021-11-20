@@ -1,0 +1,14 @@
+[
+    {
+        "id": 0,
+        "tables": [
+            {
+                "id": 0,
+                "bookable": true,
+                "disabled": false,
+                "booked": [],
+                "properties": ["Drucker"]
+            }
+        ]
+    }
+]
