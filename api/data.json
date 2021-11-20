@@ -1,0 +1,219 @@
+[
+    {
+    "id": 25,
+    "x": "90",
+    "y": "183",
+    "properties": ["Fenster", "Drucker", "LAN", "Bildschirm", "Stehtisch", "hohenverstellbar", "Telefon", "Lampe", "Steckdose"],
+    "disabled": false,
+    "bookable": true,
+    "booked": []
+    },
+    {
+    "id": 24,
+    "x": "50",
+    "y": "183",
+    "properties": ["Drucker", "LAN", "Stehtisch"],
+    "disabled": false,
+    "bookable": true,
+    "booked": []
+    },
+    {
+    "id": 23,
+    "x": "90",
+    "y": "133",
+    "properties": ["Bildschirm", "Drucker", "LAN"],
+    "disabled": false,
+    "bookable": true,
+    "booked": []
+    },
+    {
+    "id": 22,
+    "x": "10",
+    "y": "183",
+    "properties": ["Drucker", "Lampe", "Bildschirm"],
+    "disabled": false,
+    "bookable": true,
+    "booked": []
+    },
+    {
+    "id": 21,
+    "x": "50",
+    "y": "133",
+    "properties": ["Stehtisch", "Telefon", "Drucker"],
+    "disabled": false,
+    "bookable": true,
+    "booked": []
+    },
+    {
+    "id": 20,
+    "x": "10",
+    "y": "133",
+    "properties": ["Telefon", "Drucker", "Bildschirm"],
+    "disabled": false,
+    "bookable": true,
+    "booked": []
+    },
+    {
+    "id": 19,
+    "x": "50",
+    "y": "10",
+    "properties": ["Stehtisch", "Bildschirm", "hohenverstellbar"],
+    "disabled": false,
+    "bookable": true,
+    "booked": []
+    },
+    {
+    "id": 18,
+    "x": "10",
+    "y": "10",
+    "properties": ["Fenster", "Stehtisch"],
+    "disabled": false,
+    "bookable": true,
+    "booked": []
+    },
+    {
+    "id": 17,
+    "x": "90",
+    "y": "10",
+    "properties": ["Stehtisch", "Telefon", "Steckdose"],
+    "disabled": false,
+    "bookable": true,
+    "booked": []
+    },
+    {
+    "id": 16,
+    "x": "10",
+    "y": "60",
+    "properties": ["Bildschirm", "Lampe", "Telefon"],
+    "disabled": false,
+    "bookable": true,
+    "booked": []
+    },
+    {
+    "id": 14,
+    "x": "50",
+    "y": "60",
+    "properties": ["Telefon", "Steckdose", "Drucker"],
+    "disabled": false,
+    "bookable": true,
+    "booked": []
+    },
+    {
+    "id": 13,
+    "x": "90",
+    "y": "60",
+    "properties": ["Lampe", "Stehtisch", "Bildschirm"],
+    "disabled": false,
+    "bookable": true,
+    "booked": []
+    },
+    {
+    "id": 12,
+    "x": "228",
+    "y": "10",
+    "properties": ["Drucker", "Telefon"],
+    "disabled": false,
+    "bookable": true,
+    "booked": []
+    },
+    {
+    "id": 11,
+    "x": "188",
+    "y": "10",
+    "properties": ["Drucker", "Steckdose", "Bildschirm"],
+    "disabled": false,
+    "bookable": true,
+    "booked": []
+    },
+    {
+    "id": 10,
+    "x": "268",
+    "y": "10",
+    "properties": ["hohenverstellbar", "Drucker", "Telefon"],
+    "disabled": false,
+    "bookable": true,
+    "booked": []
+    },
+    {
+    "id": 9,
+    "x": "188",
+    "y": "60",
+    "properties": ["Drucker", "Fenster", "LAN", "Stehtisch"],
+    "disabled": false,
+    "bookable": true,
+    "booked": []
+    },
+    {
+    "id": 8,
+    "x": "228",
+    "y": "60",
+    "properties": ["Fenster", "LAN", "Stehtisch"],
+    "disabled": false,
+    "bookable": true,
+    "booked": []
+    },
+    {
+    "id": 7,
+    "x": "268",
+    "y": "60",
+    "properties": ["Bildschirm", "hohenverstellbar", "Stehtisch"],
+    "disabled": false,
+    "bookable": true,
+    "booked": []
+    },
+    {
+    "id": 6,
+    "x": "208",
+    "y": "212",
+    "properties": ["Telefon", "Fenster", "LAN"],
+    "disabled": false,
+    "bookable": true,
+    "booked": []
+    },
+    {
+    "id": 5,
+    "x": "208",
+    "y": "171",
+    "properties": ["Steckdose", "Telefon", "Drucker"],
+    "disabled": false,
+    "bookable": true,
+    "booked": []
+    },
+    {
+    "id": 4,
+    "x": "208",
+    "y": "252",
+    "properties": ["Lampe", "Stehtisch"],
+    "disabled": false,
+    "bookable": true,
+    "booked": []
+    },
+    {
+    "id": 3,
+    "x": "296",
+    "y": "212",
+    "properties": ["hohenverstellbar", "Stehtisch", "Telefon"],
+    "disabled": false,
+    "bookable": true,
+    "booked": []
+    },
+    {
+    "id": 2,
+    "x": "296",
+    "y": "171",
+    "properties": ["Drucker", "Lampe", "Steckdose"],
+    "disabled": false,
+    "bookable": true,
+    "booked": []
+    },
+    {
+    "id": 1,
+    "x": "296",
+    "y": "252",
+    "properties": ["Telefon", "Bildschirm", "hohenverstellbar"],
+    "disabled": false,
+    "bookable": true,
+    "booked": []
+    }
+    ]
+    
