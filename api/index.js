@@ -48,13 +48,17 @@ app.post('/register', (req, res) => {
   const mail = req.body.mail;
   /** @type {string} */
   const password = req.body.password;
+  /** @type {string} */
+  const name = req.body.name;
+  /** @type {number} */
+  const age = req.body.age;
   if (!mail || !password) return res.json({ data: false });
 
   if (users.has(mail)) return res.json({ data: "Mail already in use." });
 
   sendMail(mail, "Registrierung", "a");
 
-  users.set(mail, { mail, password });
+  users.set(mail, { mail, password, name, age });
 
   res.json({ data: true });
 });
@@ -68,14 +72,14 @@ app.post('/login', (req, res) => {
   const mail = req.body.mail;
   /** @type {string} */
   const password = req.body.password;
-  if (!mail || !password) return res.json({ data: false });
+  if (!mail || !password) return res.status(401).json({ user: null });
   
   const user = users.get(mail);
 
-  if (!user) return res.json({ data: "Mail not registered." });
+  if (!user) return res.status(401).json({ user: null });
 
-  if (user.password === password) return res.json({ data: true });
-  res.json({ data: false });
+  if (user.password === password) return res.status(401).json({ user: null });
+  return res.json({ user });
 });
 
 /**

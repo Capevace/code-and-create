@@ -3,6 +3,8 @@
  * @type {object}
  * @property {string} mail
  * @property {string} password
+ * @property {string} name 
+ * @property {number} age
  */
 
 /**
