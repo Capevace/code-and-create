@@ -20,7 +20,7 @@ const job = new cron.CronJob('0 * * * * *', () => {
           bookings.delete(booking.id);
 
           sendMail(booking.by, "Buchung abgelaufen",
-          "Ihre Buchung wurde storniert, da Sie nicht rechtzeitig eingechecked sind.");
+          `Ihre Buchung (ID: ${booking.id}) wurde storniert, da Sie nicht rechtzeitig eingechecked sind.`);
         }
       }
     }
@@ -251,7 +251,7 @@ function book(room, table, from, to, by) {
   bookings.set(booking.id, booking);
 
   sendMail(by, "Buchungsbestätigung",
-  `Ihre Buchung wurde bestätigt (ID: ${booking.id}).`);
+  `Ihre Buchung wurde bestätigt (ID: ${booking.id}).\nVon: ${new Date(booking.from)}\nBis: ${new Date(booking.to)}`);
 }
 
 function initData() {
