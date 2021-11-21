@@ -6,19 +6,9 @@
           <span class="text-h5">LOGIN</span>
         </v-card-title>
 
-        <v-text-field
-          v-model="email"
-          :error-messages="errors"
-          label="E-mail"
-          required
-        />
+        <v-text-field v-model="email" label="E-Mail" required />
 
-        <v-text-field
-          v-model="Passwort"
-          :error-messages="errors"
-          label="Passwort"
-          required
-        />
+        <v-text-field v-model="password" label="Passwort" required />
         <div class="d-flex justify-between">
           <p class="block flex-grow-1 mx-3">
             Du bist neu?
@@ -43,35 +33,31 @@
 
         <form @submit.prevent="submit">
           <v-text-field
-            v-model="name"
-            :error-messages="errors"
+            v-model="guest.name"
             label="Name"
             required
           ></v-text-field>
 
+          <v-text-field label="Telefonnummer" required></v-text-field>
+
           <v-text-field
-            v-model="phoneNumber"
-            :error-messages="errors"
-            label="Phone Number"
+            v-model="guest.email"
+            label="E-Mail"
             required
           ></v-text-field>
 
-          <v-text-field
-            v-model="email"
-            :error-messages="errors"
-            label="E-mail"
-            required
-          ></v-text-field>
-
-          <v-btn class="mr-4 mx-4" type="Reset" :disabled="invalid">
-            Löschen
-          </v-btn>
-          <v-btn @click="Weiter"> Weiter </v-btn>
+          <v-btn class="mr-4 mx-4" type="Reset"> Löschen </v-btn>
+          <v-btn @click="continueGuest"> Weiter </v-btn>
         </form>
       </v-card>
     </v-col>
 
-    <RegisterDialog :show="showDialog" @close="closeDialog" />
+    <RegisterDialog
+      :show="showDialog"
+      @close="closeDialog"
+      @submit="submitRegister"
+      :loading="registerLoading"
+    />
   </v-row>
 </template>
 <script>
@@ -83,17 +69,74 @@ export default {
   },
   data: () => ({
     showDialog: false,
+    loginLoading: false,
+    registerLoading: false,
+    email: '',
+    password: '',
+    guest: {
+      name: '',
+      email: '',
+    },
   }),
   methods: {
-    login() {
-      alert('Wir haben ein neues Passwort an deine Email versendet.')
+    async login() {
+      this.loginLoading = true
+
+      try {
+        const { user } = await this.$axios.$post(`/api/login`, {
+          mail: this.email,
+          password: this.password,
+        })
+
+        this.$store.commit('auth/setUser', {
+          email: this.email,
+          name: 'Max Mustermann',
+        })
+
+        this.$router.push({
+          path: '/confirmation',
+        })
+      } catch (e) {
+        alert(e.message)
+      }
+
+      this.loginLoading = false
     },
     register() {
       this.showDialog = true
     },
+    async submitRegister({ name, email, password, age }) {
+      this.registerLoading = true
+
+      try {
+        const { user } = await this.$axios.$post(`/api/register`, {
+          name,
+          email,
+          password,
+          age,
+        })
+
+        this.$store.commit('auth/setUser', {
+          email: this.email,
+          name: 'Max Mustermann',
+        })
+
+        this.showDialog = false
+
+        this.$router.push({
+          path: '/confirmation',
+        })
+      } catch (e) {
+        alert(e.message)
+      }
+
+      this.registerLoading = false
+    },
     closeDialog() {
       this.showDialog = false
     },
+
+    continueGuest() {},
   },
 }
 </script>

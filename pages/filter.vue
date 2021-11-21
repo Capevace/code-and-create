@@ -137,14 +137,17 @@ export default {
       try {
         const from = new Date(`${this.date} ${this.timeStart}`).getTime()
         const to = new Date(`${this.date} ${this.timeStart}`).getTime()
+        const filterQuery = this.features.reduce((query, feature, index) => {
+          if (index !== 0) {
+            query += '&'
+          }
 
-        const { data } = await this.$axios.$get('/api/find', {
-          params: {
-            room: 0,
-            from,
-            to,
-          },
-        })
+          return query + 'filters[]=' + featureList[feature]
+        }, '')
+
+        const { data } = await this.$axios.$get(
+          `/api/find?from=${from}&to=${to}&${filterQuery}`
+        )
 
         console.log(data)
 
