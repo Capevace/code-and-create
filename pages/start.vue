@@ -15,7 +15,11 @@
 
         <v-col>
           <div class="d-flex justify-center" v-if="step === 0">
-            <v-date-picker v-model="date" justify="center"></v-date-picker>
+            <v-date-picker
+              v-model="date"
+              :min="today"
+              justify="center"
+            ></v-date-picker>
           </div>
         </v-col>
       </v-row>
@@ -49,6 +53,7 @@
           <div class="d-flex justify-center">
             <v-time-picker
               v-model="timeEnd"
+              :min="timeStart"
               format="24hr"
               scrollable
             ></v-time-picker>
@@ -64,13 +69,18 @@
 </template>
 <script>
 export default {
-  data() {
+  data(vm) {
     return {
       step: 0,
-      date: '',
+      date: vm.today,
       timeStart: '',
       timeEnd: '',
     }
+  },
+  computed: {
+    today() {
+      return new Date().toISOString().substring(0, 10)
+    },
   },
   methods: {
     next() {

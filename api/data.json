@@ -1,14 +1,24 @@
 [
-    {
+  {
     "id": 25,
     "x": "90",
     "y": "183",
-    "properties": ["Fenster", "Drucker", "LAN", "Bildschirm", "Stehtisch", "hohenverstellbar", "Telefon", "Lampe", "Steckdose"],
+    "properties": [
+      "Fenster",
+      "Drucker",
+      "LAN",
+      "Bildschirm",
+      "Stehtisch",
+      "hohenverstellbar",
+      "Telefon",
+      "Lampe",
+      "Steckdose"
+    ],
     "disabled": false,
     "bookable": true,
     "booked": []
-    },
-    {
+  },
+  {
     "id": 24,
     "x": "50",
     "y": "183",
@@ -16,8 +26,8 @@
     "disabled": false,
     "bookable": true,
     "booked": []
-    },
-    {
+  },
+  {
     "id": 23,
     "x": "90",
     "y": "133",
@@ -25,8 +35,8 @@
     "disabled": false,
     "bookable": true,
     "booked": []
-    },
-    {
+  },
+  {
     "id": 22,
     "x": "10",
     "y": "183",
@@ -34,8 +44,8 @@
     "disabled": false,
     "bookable": true,
     "booked": []
-    },
-    {
+  },
+  {
     "id": 21,
     "x": "50",
     "y": "133",
@@ -43,8 +53,8 @@
     "disabled": false,
     "bookable": true,
     "booked": []
-    },
-    {
+  },
+  {
     "id": 20,
     "x": "10",
     "y": "133",
@@ -52,8 +62,8 @@
     "disabled": false,
     "bookable": true,
     "booked": []
-    },
-    {
+  },
+  {
     "id": 19,
     "x": "50",
     "y": "10",
@@ -61,8 +71,8 @@
     "disabled": false,
     "bookable": true,
     "booked": []
-    },
-    {
+  },
+  {
     "id": 18,
     "x": "10",
     "y": "10",
@@ -70,8 +80,8 @@
     "disabled": false,
     "bookable": true,
     "booked": []
-    },
-    {
+  },
+  {
     "id": 17,
     "x": "90",
     "y": "10",
@@ -79,8 +89,8 @@
     "disabled": false,
     "bookable": true,
     "booked": []
-    },
-    {
+  },
+  {
     "id": 16,
     "x": "10",
     "y": "60",
@@ -88,8 +98,8 @@
     "disabled": false,
     "bookable": true,
     "booked": []
-    },
-    {
+  },
+  {
     "id": 14,
     "x": "50",
     "y": "60",
@@ -97,8 +107,8 @@
     "disabled": false,
     "bookable": true,
     "booked": []
-    },
-    {
+  },
+  {
     "id": 13,
     "x": "90",
     "y": "60",
@@ -106,8 +116,8 @@
     "disabled": false,
     "bookable": true,
     "booked": []
-    },
-    {
+  },
+  {
     "id": 12,
     "x": "228",
     "y": "10",
@@ -115,8 +125,8 @@
     "disabled": false,
     "bookable": true,
     "booked": []
-    },
-    {
+  },
+  {
     "id": 11,
     "x": "188",
     "y": "10",
@@ -124,8 +134,8 @@
     "disabled": false,
     "bookable": true,
     "booked": []
-    },
-    {
+  },
+  {
     "id": 10,
     "x": "268",
     "y": "10",
@@ -133,8 +143,8 @@
     "disabled": false,
     "bookable": true,
     "booked": []
-    },
-    {
+  },
+  {
     "id": 9,
     "x": "188",
     "y": "60",
@@ -142,8 +152,8 @@
     "disabled": false,
     "bookable": true,
     "booked": []
-    },
-    {
+  },
+  {
     "id": 8,
     "x": "228",
     "y": "60",
@@ -151,8 +161,8 @@
     "disabled": false,
     "bookable": true,
     "booked": []
-    },
-    {
+  },
+  {
     "id": 7,
     "x": "268",
     "y": "60",
@@ -160,8 +170,8 @@
     "disabled": false,
     "bookable": true,
     "booked": []
-    },
-    {
+  },
+  {
     "id": 6,
     "x": "208",
     "y": "212",
@@ -169,8 +179,8 @@
     "disabled": false,
     "bookable": true,
     "booked": []
-    },
-    {
+  },
+  {
     "id": 5,
     "x": "208",
     "y": "171",
@@ -178,8 +188,8 @@
     "disabled": false,
     "bookable": true,
     "booked": []
-    },
-    {
+  },
+  {
     "id": 4,
     "x": "208",
     "y": "252",
@@ -187,8 +197,8 @@
     "disabled": false,
     "bookable": true,
     "booked": []
-    },
-    {
+  },
+  {
     "id": 3,
     "x": "296",
     "y": "212",
@@ -196,8 +206,8 @@
     "disabled": false,
     "bookable": true,
     "booked": []
-    },
-    {
+  },
+  {
     "id": 2,
     "x": "296",
     "y": "171",
@@ -205,8 +215,8 @@
     "disabled": false,
     "bookable": true,
     "booked": []
-    },
-    {
+  },
+  {
     "id": 1,
     "x": "296",
     "y": "252",
@@ -214,6 +224,5 @@
     "disabled": false,
     "bookable": true,
     "booked": []
-    }
-    ]
-    
+  }
+]

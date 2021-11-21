@@ -1,40 +1,74 @@
 <template>
   <v-container v-if="places">
-    <v-card v-if="selectedPlace" small class="place-info" max-width="250">
-      <v-img height="150" src="http://localhost:3000/place1.jpg"></v-img>
+    <div class="place-info">
+      <v-card class="mb-5 pa-5" max-width="350">
+        <v-row>
+          <v-col sm="6">
+            <p class="mb-0">Am</p>
+            <h3>{{ query.date | simpleDate }}</h3>
+          </v-col>
 
-      <v-card-title class="pb-0">
-        Platz: {{ selectedPlace.id }}
-        <v-spacer />
-        <v-chip
-          small
-          :color="selectedPlace.available ? 'green' : 'red'"
-          text-color="white"
-        >
-          {{ selectedPlace.available ? 'Verfügbar' : 'Nicht verfügbar' }}
-        </v-chip>
-      </v-card-title>
-      <v-card-text>
-        <div class="text-subtitle-1 mb-2">
-          {{ query.timeStart }} - {{ query.timeEnd }}
-        </div>
+          <v-col sm="6">
+            <p class="mb-0">Zeit</p>
+            <h3>{{ query.timeStart }} - {{ query.timeEnd }}</h3>
+          </v-col>
 
-        <v-chip small v-for="prop in selectedPlace.properties" :key="prop">
-          {{ prop }}
-        </v-chip>
-        <v-chip small>test</v-chip>
-      </v-card-text>
+          <v-col sm="12">
+            <p class="mb-0">Besonderheiten</p>
+            <div>
+              <v-chip
+                class="mr-1"
+                small
+                v-for="activeFeature in query.features"
+                :key="featureList[activeFeature]"
+              >
+                {{ featureList[activeFeature] }}
+              </v-chip>
+            </div>
+          </v-col>
+        </v-row>
+      </v-card>
+      <v-card v-if="selectedPlace" small max-width="250">
+        <v-img height="150" src="http://localhost:3000/place1.jpg"></v-img>
 
-      <v-card-actions class="d-flex justify-end">
-        <v-btn
-          right
-          color="primary"
-          @click="book"
-          :disabled="!selectedPlace.available"
-          >Platz buchen</v-btn
-        >
-      </v-card-actions>
-    </v-card>
+        <v-card-title class="pb-0">
+          Platz: {{ selectedPlace.id }}
+          <v-spacer />
+          <v-chip
+            small
+            :color="selectedPlace.available ? 'green' : 'red'"
+            text-color="white"
+          >
+            {{ selectedPlace.available ? 'Verfügbar' : 'Nicht verfügbar' }}
+          </v-chip>
+        </v-card-title>
+        <v-card-text>
+          <div class="text-subtitle-1 mb-2">
+            {{ query.timeStart }} - {{ query.timeEnd }}
+          </div>
+
+          <v-chip
+            class="mb-2 mr-1"
+            small
+            v-for="prop in selectedPlace.properties"
+            :key="prop"
+          >
+            {{ prop }}
+          </v-chip>
+        </v-card-text>
+
+        <v-card-actions class="d-flex justify-end">
+          <v-btn
+            right
+            color="primary"
+            @click="book"
+            :disabled="!selectedPlace.available"
+            >Platz buchen</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </div>
+
     <LazyMap
       :places="places"
       :selected-place="selectedPlace ? selectedPlace.id : null"
@@ -45,11 +79,19 @@
 <script>
 // import Map from '../components/Map'
 import placePositions from '../data/place-data'
+import featureList from '../data/feature-list'
 
 export default {
-  data() {
+  data(vm) {
+    const available = this.$store.state.map.places || []
+    const random = Math.floor(Math.random() * available.length)
+
+    console.log(available[random])
     return {
-      selectedPlace: null,
+      selectedPlace: {
+        ...placePositions[available[random]],
+        available: true,
+      },
     }
   },
   created() {
@@ -65,7 +107,15 @@ export default {
       //   })
     }
   },
+  filters: {
+    simpleDate(d) {
+      return new Date(d).toLocaleDateString()
+    },
+  },
   computed: {
+    featureList() {
+      return featureList
+    },
     query() {
       return this.$store.state.query.query
     },
@@ -84,39 +134,11 @@ export default {
         }, {})
     },
     available() {
-      return Object.values(
-        this.$store.state.map.places || [
-          {
-            id: 21,
-            properties: [],
-            disabled: false,
-            bookable: true,
-            booked: [],
-          },
-          {
-            id: 20,
-            properties: [],
-            disabled: false,
-            bookable: true,
-            booked: [],
-          },
-          {
-            id: 19,
-            properties: [],
-            disabled: false,
-            bookable: true,
-            booked: [],
-          },
-        ]
-      ).reduce((placeObj, place) => {
-        placeObj[place.id] = place
-        return placeObj
-      }, {})
+      return this.$store.state.map.places || [21, 20, 19, 18, 17]
     },
   },
   methods: {
     onPlaceSelected(placeId) {
-      console.log(this.places, placeId, this.places[placeId])
       this.selectedPlace = this.places[placeId]
     },
     book() {
