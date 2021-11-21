@@ -112,6 +112,13 @@ app.get('/find', (req, res) => {
   res.json({ data: tables });
 });
 
+app.get('/book/:id', (req, res) => {
+  const booking = bookings.get(parseInt(req.params.id));
+  if (!booking) return res.status(500).json({ data: "Invalid booking ID" });
+
+  res.json(booking);
+});
+
 /**
  * POST /api/book
  * body: { room: number, tableId: number, from: number, to: number, by: string}
@@ -137,7 +144,7 @@ app.post('/book', (req, res) => {
 
   book(room, table, from, to, by);
 
-  res.json({ data: true });
+  res.json({ bookingId });
 });
 
 /**
