@@ -8,6 +8,6 @@ export const mutations = {
   },
 
   reset(state) {
-    state.places = places
+    state.places = []
   },
 }

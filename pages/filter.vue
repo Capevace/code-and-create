@@ -88,11 +88,12 @@
   </v-container>
 </template>
 <script>
+import featureList from '../data/feature-list'
+
 export default {
   data: () => ({
-    loading: true,
+    loading: false,
     error: null,
-    featureList: ['Ruheplatz', 'LAN-Stecker', 'Externer Bildschirm', 'Drucker'],
     features: [],
   }),
   created() {
@@ -110,6 +111,9 @@ export default {
     }
   },
   computed: {
+    featureList() {
+      return featureList
+    },
     date() {
       return this.$store.state.query.query
         ? this.$store.state.query.query.date
@@ -134,15 +138,17 @@ export default {
         const from = new Date(`${this.date} ${this.timeStart}`).getTime()
         const to = new Date(`${this.date} ${this.timeStart}`).getTime()
 
-        const { places } = await this.$axios.$post('find', {
-          query: {
+        const { data } = await this.$axios.$get('/api/find', {
+          params: {
             room: 0,
             from,
             to,
           },
         })
 
-        this.$store.commit('map/places', places)
+        console.log(data)
+
+        this.$store.commit('map/setPlaces', data)
 
         this.$router.push({
           path: '/map',
@@ -154,6 +160,11 @@ export default {
       }
 
       this.loading = false
+    },
+  },
+  watch: {
+    features() {
+      this.$store.commit('query/setFeatures', this.features)
     },
   },
 }
