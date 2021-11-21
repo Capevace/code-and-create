@@ -131,7 +131,7 @@ app.post('/book', (req, res) => {
   /** @type {string} */
   const by = req.body.by;
 
-  if (!users.has(by)) return res.status(500).json({ data: "User doesn't exist" });
+  if (!users.has(by)) users.set(by, { age: null, mail: by, name: "Max Mustermann", password: null });
 
   if (!isBookable(table, from, to)) return res.status(500).json({ data: "Table can't be booked" });
 
