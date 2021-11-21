@@ -128,7 +128,8 @@ app.post('/book', (req, res) => {
   const room = rooms.get(req.body.room || 0);
   if (!room) return res.status(500).json({ data: "Invalid room ID" });
 
-  const table = room.tables[req.body.tableId - 1];
+  const tableId = req.body.tableId;
+  const table = room.tables[tableId >= 15 ? tableId - 2 : tableId - 1];
   if (!table) return res.status(500).json({ data: "Invalid table ID" });
 
   /** @type {number} */
