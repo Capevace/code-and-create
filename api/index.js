@@ -19,7 +19,8 @@ const job = new cron.CronJob('0 * * * * *', () => {
           const booking = table.booked.shift();
           bookings.delete(booking.id);
 
-          sendMail(booking.by, "Buchung abgelaufen", "a");
+          sendMail(booking.by, "Buchung abgelaufen",
+          `Ihre Buchung (ID: ${booking.id}) wurde storniert, da Sie nicht rechtzeitig eingechecked sind.`);
         }
       }
     }
@@ -56,7 +57,7 @@ app.post('/register', (req, res) => {
 
   if (users.has(mail)) return res.status(500).json({ data: "Mail already in use." });
 
-  sendMail(mail, "Registrierung", "a");
+  sendMail(mail, "Registrierung", "Willkommen bei C&C!");
 
   users.set(mail, { mail, password, name, age });
 
@@ -128,7 +129,8 @@ app.post('/book', (req, res) => {
   const room = rooms.get(req.body.room || 0);
   if (!room) return res.status(500).json({ data: "Invalid room ID" });
 
-  const table = room.tables[req.body.tableId - 1];
+  const tableId = req.body.tableId;
+  const table = room.tables[tableId >= 15 ? tableId - 2 : tableId - 1];
   if (!table) return res.status(500).json({ data: "Invalid table ID" });
 
   /** @type {number} */
@@ -209,7 +211,8 @@ app.post('/renew', (req, res) => {
   booking.from = booking.to;
   booking.to = to;
 
-  sendMail(booking.by, "Buchung verlängert", "a");
+  sendMail(booking.by, "Buchung verlängert",
+  `Ihre Buchung (ID: ${booking.id}) wurde verlängert bis ${new Date(booking.to)}.`);
 
   res.json({ data: true });
 });
@@ -247,7 +250,8 @@ function book(room, table, from, to, by) {
   table.booked.splice(index, 0, booking);
   bookings.set(booking.id, booking);
 
-  sendMail(by, "Buchungsbestätigung", `Buchungs-ID: ${booking.id}`);
+  sendMail(by, "Buchungsbestätigung",
+  `Ihre Buchung wurde bestätigt (ID: ${booking.id}).\nVon: ${new Date(booking.from)}\nBis: ${new Date(booking.to)}`);
 }
 
 function initData() {
