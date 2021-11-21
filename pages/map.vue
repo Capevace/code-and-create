@@ -89,7 +89,7 @@ export default {
     console.log(available[random])
     return {
       selectedPlace: {
-        ...placePositions[available[random]],
+        ...placePositions.find((place) => place.id === available[random]),
         available: true,
       },
     }
@@ -125,7 +125,7 @@ export default {
           return {
             ...place,
 
-            available: this.available.hasOwnProperty(place.id),
+            available: this.available.includes(place.id),
           }
         })
         .reduce((placeObj, place) => {
