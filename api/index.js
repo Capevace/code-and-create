@@ -52,15 +52,15 @@ app.post('/register', (req, res) => {
   const name = req.body.name;
   /** @type {number} */
   const age = req.body.age;
-  if (!mail || !password) return res.json({ data: false });
+  if (!mail || !password) return res.status(500).json({ data: "E-Mail and password are required." });
 
-  if (users.has(mail)) return res.json({ data: "Mail already in use." });
+  if (users.has(mail)) return res.status(500).json({ data: "Mail already in use." });
 
   sendMail(mail, "Registrierung", "a");
 
   users.set(mail, { mail, password, name, age });
 
-  res.json({ data: true });
+  res.json({ data: "Registered." });
 });
 
 /**
@@ -99,7 +99,7 @@ app.get('/find', (req, res) => {
   /** @type {string[]} */
   //@ts-ignore
   const filters = req.query.filters;
-  if (!room) return res.json({ data: false });
+  if (!room) return res.status(500).json({ data: "Invalid room ID" });
 
   /** @type {number} */
   //@ts-ignore
@@ -112,6 +112,13 @@ app.get('/find', (req, res) => {
   res.json({ data: tables });
 });
 
+app.get('/book/:id', (req, res) => {
+  const booking = bookings.get(parseInt(req.params.id));
+  if (!booking) return res.status(500).json({ data: "Invalid booking ID" });
+
+  res.json(booking);
+});
+
 /**
  * POST /api/book
  * body: { room: number, tableId: number, from: number, to: number, by: string}
@@ -119,10 +126,10 @@ app.get('/find', (req, res) => {
 app.post('/book', (req, res) => {
   //@ts-ignore
   const room = rooms.get(req.body.room || 0);
-  if (!room) return res.json({ data: false });
+  if (!room) return res.status(500).json({ data: "Invalid room ID" });
 
   const table = room.tables[req.body.tableId - 1];
-  if (!table) return res.json({ data: false });
+  if (!table) return res.status(500).json({ data: "Invalid table ID" });
 
   /** @type {number} */
   const from = req.body.from;
@@ -131,13 +138,13 @@ app.post('/book', (req, res) => {
   /** @type {string} */
   const by = req.body.by;
 
-  if (!users.has(by)) return res.json({ data: false });
+  if (!users.has(by)) users.set(by, { age: null, mail: by, name: "Max Mustermann", password: null });
 
-  if (!isBookable(table, from, to)) return res.json({ data: false });
+  if (!isBookable(table, from, to)) return res.status(500).json({ data: "Table can't be booked" });
 
   book(room, table, from, to, by);
 
-  res.json({ data: true });
+  res.json({ bookingId });
 });
 
 /**
@@ -148,7 +155,7 @@ app.post('/check-in', (req, res) => {
   const id = parseInt(req.body.id);
 
   const booking = bookings.get(id);
-  if (!booking) return res.json({ data: false });
+  if (!booking) return res.status(500).json({ data: "Invalid booking ID" });
 
   booking.checkedIn = true;
 
@@ -163,16 +170,16 @@ app.post('/check-out', (req, res) => {
   const id = parseInt(req.body.id);
 
   const booking = bookings.get(id);
-  if (!booking) return res.json({ data: false });
+  if (!booking) return res.status(500).json({ data: "Invalid booking ID" });
 
   const room = rooms.get(booking.roomId);
-  if (!room) return res.json({ data: false });
+  if (!room) return res.status(500).json({ data: "Invalid room ID" });
 
   const table = room.tables[booking.tableId - 1];
-  if (!table) return res.json({ data: false });
+  if (!table) return res.status(500).json({ data: "Invalid table ID" });
 
   const index = table.booked.findIndex(b => b.id === booking.id);
-  if (index === -1) return res.json({ data: false });
+  if (index === -1) return res.status(500).json({ data: "Invalid booking ID" });
 
   bookings.delete(booking.id);
   table.booked.splice(index, 1);
@@ -190,14 +197,14 @@ app.post('/renew', (req, res) => {
   const id = parseInt(req.body.id);
 
   const booking = bookings.get(id);
-  if (!booking) return res.json({ data: false });
+  if (!booking) return res.status(500).json({ data: "Invalid booking ID" });
 
   const room = rooms.get(booking.roomId);
   const table = room?.tables[booking.tableId];
 
-  if (!room || !table) return res.json({ data: false });
+  if (!room || !table) return res.status(500).json({ data: "Invalid room or table ID" });
 
-  if (!isBookable(table, booking.to, to)) return res.json({ data: false });
+  if (!isBookable(table, booking.to, to)) return res.status(500).json({ data: "Table can't be booked" });
 
   booking.from = booking.to;
   booking.to = to;
