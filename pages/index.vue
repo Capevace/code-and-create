@@ -1,77 +1,116 @@
 <template>
-  <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
-      <v-card class="logo py-4 d-flex justify-center">
-        <NuxtLogo />
-        <VuetifyLogo />
-      </v-card>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
-        </v-card-title>
-        <v-card-text>
-          <p>Vuetify is a progressive Material Design component framework for Vue.js. It was designed to empower developers to create amazing applications.</p>
-          <p>
-            For more information on Vuetify, check out the <a
-              href="https://vuetifyjs.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              documentation
-            </a>.
-          </p>
-          <p>
-            If you have questions, please join the official <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="chat"
-            >
-              discord
-            </a>.
-          </p>
-          <p>
-            Find a bug? Report it on the github <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="contribute"
-            >
-              issue board
-            </a>.
-          </p>
-          <p>Thank you for developing with Vuetify and I look forward to bringing more exciting features in the future.</p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
+  <v-container>
+    <v-row>
+      <v-col>
+        <h1 class="mb-2">
+          <span class="italic">Willkommen im</span> C&C Co-working space!
+        </h1>
+      </v-col>
+    </v-row>
+
+    <template v-if="step === 0">
+      <v-row>
+        <v-col sm="12" md="5">
+          <h2 class="">Wann willst du bei uns arbeiten?</h2>
+          <p>Wähle einen Tag, an dem du bei uns arbeiten willst.</p>
+        </v-col>
+
+        <v-col>
+          <div class="d-flex justify-center" v-if="step === 0">
+            <v-date-picker
+              v-model="date"
+              :min="today"
+              justify="center"
+            ></v-date-picker>
           </div>
-          <hr class="my-3">
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt Documentation
-          </a>
-          <br>
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt GitHub
-          </a>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            color="primary"
-            nuxt
-            to="/inspire"
-          >
-            Continue
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-  </v-row>
+        </v-col>
+      </v-row>
+    </template>
+
+    <template v-if="step === 1">
+      <v-row>
+        <v-col>
+          <h2>Um wie viel Uhr soll es losgehen?</h2>
+          <p>Wähle eine Uhrzeit, an der du anfangen möchtest.</p>
+        </v-col>
+        <v-col>
+          <div class="d-flex justify-center">
+            <v-time-picker
+              v-model="timeStart"
+              format="24hr"
+              scrollable
+            ></v-time-picker>
+          </div>
+        </v-col>
+      </v-row>
+    </template>
+
+    <template v-if="step === 2">
+      <v-row>
+        <v-col>
+          <h2>Bis wann willst du bei uns bleiben?</h2>
+          <p>Wähle die Uhrzeit, an der du vor hast zu gehen.</p>
+        </v-col>
+        <v-col>
+          <div class="d-flex justify-center">
+            <v-time-picker
+              v-model="timeEnd"
+              :min="timeStart"
+              format="24hr"
+              scrollable
+            ></v-time-picker>
+          </div>
+        </v-col>
+      </v-row>
+    </template>
+
+    <v-row justify="end">
+      <v-btn color="primary" @click="next">Weiter</v-btn>
+    </v-row>
+  </v-container>
 </template>
+<script>
+export default {
+  data(vm) {
+    return {
+      step: 0,
+      date: vm.today,
+      timeStart: '',
+      timeEnd: '',
+    }
+  },
+  computed: {
+    today() {
+      return new Date().toISOString().substring(0, 10)
+    },
+  },
+  methods: {
+    next() {
+      if (this.step >= 2) {
+        this.$store.commit('query/setQuery', {
+          date: this.date,
+          timeStart: this.timeStart,
+          timeEnd: this.timeEnd,
+        })
+        this.$router.push({
+          path: '/filter',
+        })
+      } else {
+        this.step++
+      }
+    },
+    submit() {},
+  },
+  watch: {
+    timeStart() {
+      this.timeEnd = this.timeStart
+    },
+  },
+}
+</script>
+
+<style>
+.avoid-clicks {
+  pointer-events: none;
+}
+</style>

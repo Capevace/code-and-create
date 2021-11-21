@@ -136,7 +136,7 @@ export default {
       this.loading = true
       try {
         const from = new Date(`${this.date} ${this.timeStart}`).getTime()
-        const to = new Date(`${this.date} ${this.timeStart}`).getTime()
+        const to = new Date(`${this.date} ${this.timeEnd}`).getTime()
         const filterQuery = this.features.reduce((query, feature, index) => {
           if (index !== 0) {
             query += '&'

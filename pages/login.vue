@@ -1,54 +1,64 @@
 <template>
-  <v-row>
+  <v-row class="mt-5">
     <v-col>
-      <v-card class="mx-auto" max-width="400" height="260">
+      <v-card class="mx-auto p-4" max-width="400" height="260">
         <v-card-title>
-          <span class="text-h5">LOGIN</span>
+          <span class="text-h5">Login</span>
         </v-card-title>
 
-        <v-text-field v-model="email" label="E-Mail" required />
+        <v-card-text>
+          <v-text-field v-model="email" type="email" label="E-Mail" required />
 
-        <v-text-field v-model="password" label="Passwort" required />
-        <div class="d-flex justify-between">
-          <p class="block flex-grow-1 mx-3">
-            Du bist neu?
-            <a @click="register"> Registrieren</a>
-          </p>
-          <v-btn class="flex-grow-0 mx-4" @click="login"> Anmelden </v-btn>
+          <v-text-field
+            v-model="password"
+            type="password"
+            label="Passwort"
+            required
+          />
+          <div class="d-flex justify-between">
+            <p class="block flex-grow-1 mx-3">
+              Du bist neu?
+              <a @click="register"> Registrieren</a>
+            </p>
+            <v-btn class="flex-grow-0 mx-4" @click="login"> Anmelden </v-btn>
 
-          <!-- <v-row>
+            <!-- <v-row>
                 <p class="block flex-grow-1 mx-3 "> 
                 <a @click="login"> Passwort vergessen? </a>
                 </p>
             </v-row> -->
-        </div>
+          </div>
+        </v-card-text>
       </v-card>
     </v-col>
 
     <v-col>
       <v-card class="mx-auto" max-width="400" height="330">
         <v-card-title>
-          <span class="text-h5">Gast - Zugang</span>
+          <span class="text-h5">Gast-Zugang</span>
         </v-card-title>
 
-        <form @submit.prevent="submit">
-          <v-text-field
-            v-model="guest.name"
-            label="Name"
-            required
-          ></v-text-field>
+        <v-card-text>
+          <form @submit.prevent="submit">
+            <v-text-field
+              v-model="guest.name"
+              label="Name"
+              required
+            ></v-text-field>
 
-          <v-text-field label="Telefonnummer" required></v-text-field>
+            <v-text-field label="Telefonnummer" required></v-text-field>
 
-          <v-text-field
-            v-model="guest.email"
-            label="E-Mail"
-            required
-          ></v-text-field>
+            <v-text-field
+              v-model="guest.email"
+              label="E-Mail"
+              required
+            ></v-text-field>
 
-          <v-btn class="mr-4 mx-4" type="Reset"> Löschen </v-btn>
-          <v-btn @click="continueGuest"> Weiter </v-btn>
-        </form>
+            <v-row justify="end" class="mt-1 px-4">
+              <v-btn @click="continueGuest"> Weiter </v-btn>
+            </v-row>
+          </form>
+        </v-card-text>
       </v-card>
     </v-col>
 
@@ -111,7 +121,7 @@ export default {
       try {
         const { user } = await this.$axios.$post(`/api/register`, {
           name,
-          email,
+          mail: email,
           password,
           age,
         })
@@ -136,7 +146,15 @@ export default {
       this.showDialog = false
     },
 
-    continueGuest() {},
+    continueGuest() {
+      this.$store.commit('auth/setUser', {
+        email: this.guest.email,
+        name: this.guest.name,
+      })
+      this.$router.push({
+        path: '/confirmation',
+      })
+    },
   },
 }
 </script>

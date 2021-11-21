@@ -1,5 +1,5 @@
 <template>
-  <v-hover v-slot="{ hover }" v-if="booking">
+  <v-hover v-if="booking">
     <v-card class="mx-auto" color="grey lighten-4" max-width="600">
       <v-img
         class="white--text align-end"
@@ -17,37 +17,50 @@
 
         <v-row>
           <v-col>
-            <h3 class="text-h4 font-weight-normal orange--text mb-4">
-              Platz: {{ booking.place.id }}
-              <!-- <a @click="selectDate"> Edit</a> -->
-            </h3>
-            <h3 class="text-h5 font-weight-light orange--text mb-2">
-              {{ booking.date | simpleDate }}
-              <!-- <a @click="selectPlace"> Edit</a> -->
-            </h3>
+            <v-row justify="space-between" class="px-4">
+              <h3 class="text-h4 font-weight-normal orange--text mb-4">
+                Platz: {{ booking.place.id }}
+              </h3>
+            </v-row>
 
-            <h3 class="text-h5 font-weight-light orange--text mb-2">
-              {{ booking.timeStart }} - {{ booking.timeEnd }} Uhr
+            <v-row class="px-4 mb-0" justify="space-between">
+              <h3 class="text-h5 font-weight-light orange--text">
+                {{ booking.date | simpleDate }}
 
-              <!-- <a @click="selectPlace"> Edit</a> -->
-            </h3>
+                <!-- <a @click="selectPlace"> Edit</a> -->
+              </h3>
+            </v-row>
+
+            <v-row class="px-4 mt-0">
+              <h3 class="text-h5 font-weight-light orange--text mb-2">
+                {{ booking.timeStart }} - {{ booking.timeEnd }} Uhr
+
+                <!-- <a @click="selectPlace"> Edit</a> -->
+              </h3>
+            </v-row>
           </v-col>
           <v-col class="pt-10">
-            <v-row class="font-weight-light grey--text text-h6 mx-0">
-              Vorname Nachname
+            <v-row
+              class="font-weight-light grey--text text-h6 mx-0"
+              justify="space-between"
+            >
+              <div>{{ user.name }}</div>
+              <v-btn icon class="p-0" @click="$router.push('/login')">
+                <v-icon small> mdi-pencil </v-icon>
+              </v-btn>
             </v-row>
             <v-row class="font-weight-light grey--text text-h6 mx-0">
-              Email Adresse
+              {{ user.email }}
             </v-row>
 
-            <v-row class="px-3 mt-7" justify="space-between">
+            <v-row class="px-3 mt-7 mb-0" justify="space-between">
               <v-btn
                 color="orange"
                 elevation="2"
                 outlined
                 @click="$router.push('/map')"
               >
-                Zurück
+                Bearbeiten
               </v-btn>
 
               <v-btn color="primary" elevation="2" right @click="bookNow">
@@ -73,6 +86,14 @@ export default {
     booking() {
       return this.$store.state.booking.booking || null
     },
+    user() {
+      return (
+        this.$store.state.auth.user || {
+          name: 'Max Mustermann',
+          email: 'max@mustermann.de',
+        }
+      )
+    },
   },
   data: () => ({
     showDialog: false,
@@ -93,15 +114,15 @@ export default {
           `${this.booking.date} ${this.booking.timeStart}`
         ).getTime()
         const to = new Date(
-          `${this.booking.date} ${this.booking.timeStart}`
+          `${this.booking.date} ${this.booking.timeEnd}`
         ).getTime()
 
-        const { id } = await this.$axios.$post('book', {
-          room,
+        const { bookingId: id } = await this.$axios.$post('api/book', {
+          roomId: 0,
           tableId: this.booking.place.id,
           from,
           to,
-          user: this.booking.user.username,
+          by: this.user.email,
         })
 
         this.$router.push({

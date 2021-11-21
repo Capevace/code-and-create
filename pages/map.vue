@@ -150,7 +150,7 @@ export default {
         user: null,
       })
 
-      const user = false
+      const user = this.$store.state.auth.user
       this.$router.push({
         path: user ? '/confirmation' : '/login',
       })

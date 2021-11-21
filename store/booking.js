@@ -3,13 +3,12 @@ export const state = () => ({
 })
 
 export const mutations = {
-  createBooking(state, { place, date, timeStart, timeEnd, user }) {
+  createBooking(state, { place, date, timeStart, timeEnd }) {
     state.booking = {
       place,
       date,
       timeStart,
       timeEnd,
-      user: user || null,
     }
   },
 
