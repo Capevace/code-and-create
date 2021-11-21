@@ -3,7 +3,7 @@
     <v-row>
       <v-col>
         <h1 class="mb-2">
-          <span class="italic">Willkommen im</span> C&C Co-working space!
+          <span class="italic">Willkommen im</span> C&C CoWorkingSpace!
         </h1>
       </v-col>
     </v-row>
